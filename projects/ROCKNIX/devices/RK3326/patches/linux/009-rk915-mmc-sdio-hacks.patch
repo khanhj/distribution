@@ -1,0 +1,99 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Danil Zagoskin <z@gosk.in>
+Date: Sun, 28 Jun 2025 00:00:00 +0000
+Subject: [PATCH] mmc: add MMC_CAP2_WIFI_RK912 for rk915 SDIO WiFi chip
+
+The Rockchip RK915 SDIO WiFi chip requires special handling in the
+MMC/SDIO subsystem:
+- Relaxed CIS size and timeout validation (non-standard SDIO CIS)
+- Skip power-up sequence on resume (chip stays powered)
+- PRV_DAT_WAIT on SD_IO_RW_DIRECT commands (dw_mmc)
+- Disable low-power clock gating (dw_mmc)
+
+The 'supports-rk912' device tree property enables this behaviour.
+
+Based on mainline-linux-hacks-for-rk915.patch from stolen/rk915.
+---
+ drivers/mmc/core/host.c     |  3 +++
+ drivers/mmc/core/sdio.c     |  3 ++-
+ drivers/mmc/core/sdio_cis.c |  4 ++--
+ drivers/mmc/host/dw_mmc.c   | 10 ++++++++++
+ include/linux/mmc/host.h    |  1 +
+ 5 files changed, 18 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
+--- a/include/linux/mmc/host.h
++++ b/include/linux/mmc/host.h
+@@ -404,6 +404,7 @@ struct mmc_host {
+ #define MMC_CAP2_CRYPTO		0
+ #endif
+ #define MMC_CAP2_ALT_GPT_TEGRA	(1 << 28)	/* Host with eMMC that has GPT entry at a non-standard location */
++#define MMC_CAP2_WIFI_RK912	(1 << 29)	/* RK915 SDIO WiFi chip quirks */
+
+ 	int			fixed_drv_type;	/* fixed driver type for non-removable media */
+
+diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
+--- a/drivers/mmc/core/host.c
++++ b/drivers/mmc/core/host.c
+@@ -404,6 +404,9 @@ void mmc_of_parse(struct mmc_host *host)
+ 	if (device_property_read_bool(dev, "no-mmc"))
+ 		host->caps2 |= MMC_CAP2_NO_MMC;
++	if (device_property_read_bool(dev, "supports-rk912"))
++		host->caps2 |= MMC_CAP2_WIFI_RK912;
+ 	if (device_property_read_bool(dev, "no-mmc-hs400"))
+ 		host->caps2 &= ~(MMC_CAP2_HS400_1_8V | MMC_CAP2_HS400_1_2V |
+ 				 MMC_CAP2_HS400_ES);
+diff --git a/drivers/mmc/core/sdio.c b/drivers/mmc/core/sdio.c
+--- a/drivers/mmc/core/sdio.c
++++ b/drivers/mmc/core/sdio.c
+@@ -1081,7 +1081,8 @@ static int mmc_sdio_resume(struct mmc_host *host)
+ 	 * removable card is checked from a detect work later on in the resume
+ 	 * process.
+ 	 */
+-	if (!mmc_card_keep_power(host)) {
++	if (!mmc_card_keep_power(host) &&
++	    !(host->caps2 & MMC_CAP2_WIFI_RK912)) {
+ 		mmc_power_up(host, host->card->ocr);
+ 		/*
+ 		 * Tell runtime PM core we just powered up the card,
+diff --git a/drivers/mmc/core/sdio_cis.c b/drivers/mmc/core/sdio_cis.c
+--- a/drivers/mmc/core/sdio_cis.c
++++ b/drivers/mmc/core/sdio_cis.c
+@@ -190,13 +190,13 @@ static int cistpl_funce_func(struct mmc_card *card, struct sdio_func *func,
+ 		vsn = SDIO_SDIO_REV_1_00;
+-	} else if (size < min_size) {
++	} else if (size < min_size && !(card->host->caps2 & MMC_CAP2_WIFI_RK912)) {
+ 		return -EINVAL;
+ 	}
+
+ 	/* TPLFE_MAX_BLK_SIZE */
+ 	func->max_blksize = buf[12] | (buf[13] << 8);
+
+ 	/* TPLFE_ENABLE_TIMEOUT_VAL, present in ver 1.1 and above */
+-	if (vsn > SDIO_SDIO_REV_1_00)
++	if (vsn > SDIO_SDIO_REV_1_00 && !(card->host->caps2 & MMC_CAP2_WIFI_RK912))
+ 		func->enable_timeout = (buf[28] | (buf[29] << 8)) * 10;
+ 	else
+ 		func->enable_timeout = jiffies_to_msecs(HZ);
+diff --git a/drivers/mmc/host/dw_mmc.c b/drivers/mmc/host/dw_mmc.c
+--- a/drivers/mmc/host/dw_mmc.c
++++ b/drivers/mmc/host/dw_mmc.c
+@@ -293,6 +293,11 @@ static u32 dw_mci_prepare_command(struct mmc_host *mmc, struct mmc_command *cmd)
+ 			     SDMMC_CMD_PRV_DAT_WAIT, 0);
+ 	}
+
++	if ((mmc->caps2 & MMC_CAP2_WIFI_RK912) &&
++	    (cmd->opcode == SD_IO_RW_DIRECT))
++		cmdr |= SDMMC_CMD_PRV_DAT_WAIT;
++
+ 	if (cmd->flags & MMC_RSP_PRESENT) {
+ 		/* We expect a response, so set this bit */
+ 		cmdr |= SDMMC_CMD_RESP_EXP;
+@@ -1265,7 +1270,8 @@ static void dw_mci_setup_bus(struct dw_mci_slot *slot, bool force_clkinit)
+ 		/* enable clock; only low power if no SDIO */
+ 		clk_en_a = SDMMC_CLKEN_ENABLE << slot->id;
+-		if (!test_bit(DW_MMC_CARD_NO_LOW_PWR, &slot->flags))
++		if (!test_bit(DW_MMC_CARD_NO_LOW_PWR, &slot->flags) &&
++		    !(slot->mmc->caps2 & MMC_CAP2_WIFI_RK912))
+ 			clk_en_a |= SDMMC_CLKEN_LOW_PWR << slot->id;
+ 		mci_writel(host, CLKENA, clk_en_a);
