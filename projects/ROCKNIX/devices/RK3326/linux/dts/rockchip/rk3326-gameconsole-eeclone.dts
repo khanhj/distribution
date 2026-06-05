@@ -359,6 +359,15 @@
 		};
 	};
 
+	wifi_pwrseq: wifi-pwrseq {
+		compatible = "mmc-pwrseq-simple";
+		pinctrl-names = "default";
+		pinctrl-0 = <&wifi_enable_h>;
+		reset-gpios = <&gpio0 RK_PA2 GPIO_ACTIVE_LOW>;
+		post-power-on-delay-ms = <200>;
+		power-off-delay-us = <500000>;
+	};
+
 	vccsys: vccsys {
 		compatible = "regulator-fixed";
 		regulator-name = "vcc5v0_sys";
@@ -770,17 +779,11 @@
 };
 
 &sdio {
-    cap-sd-highspeed;
-    max-frequency = <100000000>;
-    cd-gpios = <&gpio0 RK_PA2 GPIO_ACTIVE_LOW>;
-    card-detect-delay = <800>;
-    supports-sd;
-    sd-uhs-sdr12;
-    sd-uhs-sdr25;
-    sd-uhs-sdr50;
-    sd-uhs-sdr104;
-    vqmmc-supply = <&vcc2v8_dvp>;
-    vmmc-supply = <&vcc3v0_dvp>;
+    cap-sdio-irq;
+    disable-wp;
+    keep-power-in-suspend;
+    mmc-pwrseq = <&wifi_pwrseq>;
+    non-removable;
     status = "okay";
 };
 
@@ -901,6 +904,12 @@
     speaker {
         spk_amp_enable_h: spk-amp-enable-h {
             rockchip,pins = <3 RK_PA7 RK_FUNC_GPIO &pcfg_pull_none>;
+        };
+    };
+
+    sdio-pwrseq {
+        wifi_enable_h: wifi-enable-h {
+            rockchip,pins = <0 RK_PA2 RK_FUNC_GPIO &pcfg_pull_none>;
         };
     };
 };
