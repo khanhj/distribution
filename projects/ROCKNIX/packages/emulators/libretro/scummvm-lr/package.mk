@@ -30,14 +30,9 @@ PKG_LONGDESC="ScummVM with libretro backend."
 PKG_TOOLCHAIN="make"
 PKG_BUILD_FLAGS="-lto"
 
-post_unpack() {
-  if [ "${ARCH}" = "arm" ]; then
-    sed -i '1s|^|#pragma GCC optimize("O0")\n|' ${PKG_BUILD}/engines/scumm/imuse/instrument.cpp
-  fi
-}
-
 pre_make_target() {
   CXXFLAGS+=" -DHAVE_POSIX_MEMALIGN=1"
+  [ "${ARCH}" = "arm" ] && CXXFLAGS+=" -O0"
   cd ${PKG_BUILD}/backends/platform/libretro
 }
 
