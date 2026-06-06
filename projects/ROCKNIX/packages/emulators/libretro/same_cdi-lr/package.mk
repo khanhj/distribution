@@ -37,6 +37,7 @@ pre_configure_target() {
 }
 
 make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   unset ARCH
   unset DISTRO
   unset PROJECT
@@ -45,6 +46,7 @@ make_target() {
 }
 
 makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   mkdir -p ${INSTALL}/usr/lib/libretro
   cp same_cdi_libretro.so ${INSTALL}/usr/lib/libretro/
 }
