@@ -32,14 +32,16 @@ PKG_BUILD_FLAGS="-lto"
 
 pre_make_target() {
   CXXFLAGS+=" -DHAVE_POSIX_MEMALIGN=1"
-  if [ "${ARCH}" = "arm" ]; then
-    CFLAGS+=" -O0"
-    CXXFLAGS+=" -O0"
-  fi
   cd ${PKG_BUILD}/backends/platform/libretro
 }
 
+make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  make ${PKG_MAKE_OPTS_TARGET}
+}
+
 makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   mkdir -p ${INSTALL}/usr/lib/libretro
   cp scummvm_libretro.so ${INSTALL}/usr/lib/libretro/
 }
