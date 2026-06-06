@@ -24,7 +24,7 @@ make_target() {
 
 	# Build zerotier-one
     cd ${PKG_BUILD}
-    CPPFLAGS="${CPPFLAGS} -I${PKG_BUILD}/ext/libnatpmp" \
+    CPPFLAGS="${CPPFLAGS} -I${PKG_BUILD}/ext/libnatpmp -DZT_AES_NO_ACCEL" \
     LDLIBS="${LDLIBS} -L${PKG_BUILD}/ext/libnatpmp" \
     make -f make-linux.mk ZT_SSO_SUPPORTED=0 one
 }

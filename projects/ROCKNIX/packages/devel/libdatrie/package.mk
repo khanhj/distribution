@@ -9,4 +9,5 @@ PKG_URL="${PKG_SITE}/releases/download/v${PKG_VERSION}/libdatrie-${PKG_VERSION}.
 PKG_DEPENDS_TARGET="toolchain libtool"
 PKG_BUILD_FLAGS="+pic"
 PKG_TOOLCHAIN="configure"
+PKG_MAKEINSTALL_OPTS_TARGET="-j1"
 

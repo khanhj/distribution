@@ -10,6 +10,10 @@ PKG_DEPENDS_TARGET="toolchain apache-ant:host libXtst"
 PKG_LONGDESC="J2ME emulator with libretro and AWT frontends, it aims to run on basically anything that can run a Java VM."
 PKG_TOOLCHAIN="make"
 
+post_unpack() {
+  sed -i 's/value="1.6"/value="8"/g' ${PKG_BUILD}/build.xml
+}
+
 pre_configure_target() {
   ${TOOLCHAIN}/bin/ant
 }

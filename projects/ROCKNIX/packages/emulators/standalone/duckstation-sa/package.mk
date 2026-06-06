@@ -28,6 +28,8 @@ install_script() {
 }
 
 makeinstall_target() {
+  # No AppImage available for arm (32-bit); skip silently
+  [ -z "${PKG_URL}" ] && return 0
   # Redefine strip or the AppImage will be stripped rendering it unusable.
   export STRIP=true
   mkdir -p ${INSTALL}/usr/bin
