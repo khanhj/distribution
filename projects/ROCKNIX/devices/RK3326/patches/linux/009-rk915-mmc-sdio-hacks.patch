@@ -35,7 +35,7 @@ diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
 diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
 --- a/drivers/mmc/core/host.c
 +++ b/drivers/mmc/core/host.c
-@@ -404,6 +404,9 @@ void mmc_of_parse(struct mmc_host *host)
+@@ -404,5 +404,7 @@ void mmc_of_parse(struct mmc_host *host)
  	if (device_property_read_bool(dev, "no-mmc"))
  		host->caps2 |= MMC_CAP2_NO_MMC;
 +	if (device_property_read_bool(dev, "supports-rk912"))
@@ -59,7 +59,7 @@ diff --git a/drivers/mmc/core/sdio.c b/drivers/mmc/core/sdio.c
 diff --git a/drivers/mmc/core/sdio_cis.c b/drivers/mmc/core/sdio_cis.c
 --- a/drivers/mmc/core/sdio_cis.c
 +++ b/drivers/mmc/core/sdio_cis.c
-@@ -190,13 +190,13 @@ static int cistpl_funce_func(struct mmc_card *card, struct sdio_func *func,
+@@ -190,11 +190,11 @@ static int cistpl_funce_func(struct mmc_card *card, struct sdio_func *func,
  		vsn = SDIO_SDIO_REV_1_00;
 -	} else if (size < min_size) {
 +	} else if (size < min_size && !(card->host->caps2 & MMC_CAP2_WIFI_RK912)) {
