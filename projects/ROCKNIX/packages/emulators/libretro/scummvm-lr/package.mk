@@ -32,6 +32,7 @@ PKG_BUILD_FLAGS="-lto"
 
 pre_make_target() {
   CXXFLAGS+=" -DHAVE_POSIX_MEMALIGN=1"
+  [ "${ARCH}" = "arm" ] && CXXFLAGS+=" -O1"
   cd ${PKG_BUILD}/backends/platform/libretro
 }
 
