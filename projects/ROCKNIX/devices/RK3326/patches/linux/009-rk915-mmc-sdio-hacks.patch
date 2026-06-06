@@ -17,9 +17,9 @@ Based on mainline-linux-hacks-for-rk915.patch from stolen/rk915.
  drivers/mmc/core/host.c     |  3 +++
  drivers/mmc/core/sdio.c     |  3 ++-
  drivers/mmc/core/sdio_cis.c |  4 ++--
- drivers/mmc/host/dw_mmc.c   | 10 ++++++++++
+ drivers/mmc/host/dw_mmc.c   |  7 +++++++
  include/linux/mmc/host.h    |  1 +
- 5 files changed, 18 insertions(+), 3 deletions(-)
+ 5 files changed, 15 insertions(+), 3 deletions(-)
 
 diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
 --- a/include/linux/mmc/host.h
@@ -78,7 +78,7 @@ diff --git a/drivers/mmc/core/sdio_cis.c b/drivers/mmc/core/sdio_cis.c
 diff --git a/drivers/mmc/host/dw_mmc.c b/drivers/mmc/host/dw_mmc.c
 --- a/drivers/mmc/host/dw_mmc.c
 +++ b/drivers/mmc/host/dw_mmc.c
-@@ -293,6 +293,11 @@ static u32 dw_mci_prepare_command(struct mmc_host *mmc, struct mmc_command *cmd)
+@@ -295,6 +295,10 @@ static u32 dw_mci_prepare_command(struct mmc_host *mmc, struct mmc_command *cmd)
  			     SDMMC_CMD_PRV_DAT_WAIT, 0);
  	}
 
@@ -89,7 +89,7 @@ diff --git a/drivers/mmc/host/dw_mmc.c b/drivers/mmc/host/dw_mmc.c
  	if (cmd->flags & MMC_RSP_PRESENT) {
  		/* We expect a response, so set this bit */
  		cmdr |= SDMMC_CMD_RESP_EXP;
-@@ -1265,5 +1270,6 @@ static void dw_mci_setup_bus(struct dw_mci_slot *slot, bool force_clkinit)
+@@ -1264,5 +1268,6 @@ static void dw_mci_setup_bus(struct dw_mci_slot *slot, bool force_clkinit)
  		/* enable clock; only low power if no SDIO */
  		clk_en_a = SDMMC_CLKEN_ENABLE << slot->id;
 -		if (!test_bit(DW_MMC_CARD_NO_LOW_PWR, &slot->flags))
