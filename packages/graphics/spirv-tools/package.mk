@@ -15,12 +15,13 @@ PKG_DEPENDS_HOST="toolchain:host"
 PKG_DEPENDS_UNPACK="spirv-headers"
 PKG_LONGDESC="The SPIR-V Tools project provides an API and commands for processing SPIR-V modules."
 
-PKG_CMAKE_OPTS_HOST="-DSPIRV_SKIP_TESTS=ON -DSPIRV_WERROR=OFF \
-  -DCMAKE_CXX_FLAGS=-Wno-array-bounds"
+PKG_CMAKE_OPTS_HOST="-DSPIRV_SKIP_TESTS=ON -DSPIRV_WERROR=OFF"
 
 post_unpack() {
   mkdir -p ${PKG_BUILD}/external/spirv-headers
     tar --strip-components=1 \
       -xf "${SOURCES}/spirv-headers/spirv-headers-$(get_pkg_version spirv-headers).tar.gz" \
       -C "${PKG_BUILD}/external/spirv-headers"
+  sed -i 's/option(SPIRV_WERROR "Enable error on warning" ON)/option(SPIRV_WERROR "Enable error on warning" OFF)/' \
+    ${PKG_BUILD}/CMakeLists.txt
 }
