@@ -89,7 +89,7 @@ diff --git a/drivers/mmc/host/dw_mmc.c b/drivers/mmc/host/dw_mmc.c
  	if (cmd->flags & MMC_RSP_PRESENT) {
  		/* We expect a response, so set this bit */
  		cmdr |= SDMMC_CMD_RESP_EXP;
-@@ -1265,7 +1270,8 @@ static void dw_mci_setup_bus(struct dw_mci_slot *slot, bool force_clkinit)
+@@ -1265,5 +1270,6 @@ static void dw_mci_setup_bus(struct dw_mci_slot *slot, bool force_clkinit)
  		/* enable clock; only low power if no SDIO */
  		clk_en_a = SDMMC_CLKEN_ENABLE << slot->id;
 -		if (!test_bit(DW_MMC_CARD_NO_LOW_PWR, &slot->flags))
