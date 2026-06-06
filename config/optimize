@@ -14,10 +14,14 @@ HOST_CXXFLAGS="$HOST_CFLAGS"
 HOST_LDFLAGS="-Wl,-rpath,$TOOLCHAIN/lib -L$TOOLCHAIN/lib"
 HOST_INCDIR="$TOOLCHAIN/include /usr/include"
 
-# work around Ubuntu default C*FLAGS 
+# work around Ubuntu default C*FLAGS
 # see https://wiki.ubuntu.com/ToolChain/CompilerFlags#A-Wformat_-Wformat-security
 HOST_CFLAGS="$HOST_CFLAGS -Wno-format-security"
-HOST_CXXFLAGS="$HOST_CXXFLAGS -Wno-format-security" 
+HOST_CXXFLAGS="$HOST_CXXFLAGS -Wno-format-security"
+
+# work around stricter gcc-12+ const-pointer warnings on Ubuntu 24.04+
+HOST_CFLAGS="$HOST_CFLAGS -Wno-error=discarded-qualifiers"
+HOST_CXXFLAGS="$HOST_CXXFLAGS -Wno-error=discarded-qualifiers"
 
 # lto flags
 FLAGS_OPTIM_LTO="-flto"
