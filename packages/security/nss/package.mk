@@ -16,8 +16,7 @@ PKG_BUILD_FLAGS="-parallel"
 
 post_patch() {
   echo "DEFINES += -DNSS_FIPS_DISABLED" >> ${PKG_BUILD}/nss/coreconf/config.mk
-  sed -i 's/ -Werror//g' ${PKG_BUILD}/nss/coreconf/config.mk 2>/dev/null || true
-  sed -i 's/ -Werror//g' ${PKG_BUILD}/nss/coreconf/rules.mk 2>/dev/null || true
+  sed -i '/WARNING_CFLAGS.*-Werror/d' ${PKG_BUILD}/nss/coreconf/Werror.mk 2>/dev/null || true
 }
 
 make_host() {
