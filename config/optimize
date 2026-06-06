@@ -19,9 +19,9 @@ HOST_INCDIR="$TOOLCHAIN/include /usr/include"
 HOST_CFLAGS="$HOST_CFLAGS -Wno-format-security"
 HOST_CXXFLAGS="$HOST_CXXFLAGS -Wno-format-security"
 
-# work around stricter gcc-12+ const-pointer warnings on Ubuntu 24.04+
-HOST_CFLAGS="$HOST_CFLAGS -Wno-error=discarded-qualifiers"
-HOST_CXXFLAGS="$HOST_CXXFLAGS -Wno-error=discarded-qualifiers"
+# work around stricter gcc-12+ warnings on Ubuntu 24.04+
+HOST_CFLAGS="$HOST_CFLAGS -Wno-error=discarded-qualifiers -Wno-error=array-bounds -Wno-error=stringop-overflow -Wno-error=stringop-overread"
+HOST_CXXFLAGS="$HOST_CXXFLAGS -Wno-error=discarded-qualifiers -Wno-error=array-bounds -Wno-error=stringop-overflow -Wno-error=stringop-overread"
 
 # lto flags
 FLAGS_OPTIM_LTO="-flto"
