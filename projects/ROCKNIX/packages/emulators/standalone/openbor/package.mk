@@ -25,7 +25,13 @@ pre_make_target() {
   ./version.sh
 }
 
+make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  make ${PKG_MAKE_OPTS_TARGET}
+}
+
 makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   mkdir -p ${INSTALL}/usr/bin
   cp OpenBOR ${INSTALL}/usr/bin/OpenBOR
   cp ${PKG_DIR}/sources/start_OpenBOR.sh ${INSTALL}/usr/bin
