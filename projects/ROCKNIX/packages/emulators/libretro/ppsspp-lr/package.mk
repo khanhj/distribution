@@ -90,7 +90,24 @@ pre_configure_target() {
                            -DUSE_DISCORD=OFF"
 }
 
+configure_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  CMAKE_EXPORT_COMPILE_COMMANDS=1 cmake ${CMAKE_GENERATOR_NINJA} ${TARGET_CMAKE_OPTS} ${PKG_CMAKE_OPTS_TARGET} ${PKG_CMAKE_SCRIPT%/*}
+}
+
+make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  ninja ${NINJA_OPTS} ${PKG_MAKE_OPTS_TARGET}
+}
+
+makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  mkdir -p ${INSTALL}/usr/lib/libretro
+  cp ${PKG_LIBPATH} ${INSTALL}/usr/lib/libretro/
+}
+
 pre_make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   # This script should work on any board that has issues with system ffmpeg in ppsspp
   if [ "${TARGET_ARCH}" = "aarch64" ]; then
     sed -i "s|aarch64-linux-gnu-|${TARGET_PREFIX}|g" ${PKG_BUILD}/ffmpeg/linux_arm64.sh
