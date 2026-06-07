@@ -50,7 +50,13 @@ touch ${PKG_BUILD}/src/frontend/qt_sdl/retroachievements/resources/icons/placeho
 }
 
 
+make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  make ${PKG_MAKE_OPTS_TARGET}
+}
+
 makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   mkdir -p ${INSTALL}/usr/bin
   cp -rf ${PKG_BUILD}/.${TARGET_NAME}/melonDS ${INSTALL}/usr/bin
 
@@ -63,6 +69,7 @@ makeinstall_target() {
 }
 
 post_install() {
+  [ "${ARCH}" = "arm" ] && return 0
   case ${GRAPHICS_DRIVER} in
     panfrost)
       PANFROST="export MESA_GL_VERSION_OVERRIDE=3.3"

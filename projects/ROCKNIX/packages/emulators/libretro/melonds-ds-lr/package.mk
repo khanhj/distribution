@@ -21,7 +21,13 @@ elif [ "${OPENGLES_SUPPORT}" = "yes" ]; then
   PKG_CMAKE_OPTS_TARGET+=" -DDEFAULT_OPENGL_PROFILE=OpenGLES2"
 fi
 
+make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  make ${PKG_MAKE_OPTS_TARGET}
+}
+
 makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   mkdir -p ${INSTALL}/usr/lib/libretro
   cp ${PKG_BUILD}/.${TARGET_NAME}/src/libretro/melondsds_libretro.so ${INSTALL}/usr/lib/libretro/
 }
