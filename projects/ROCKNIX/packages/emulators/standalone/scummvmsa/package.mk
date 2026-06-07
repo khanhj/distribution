@@ -39,7 +39,7 @@ make_target() {
 
 makeinstall_target() {
   [ "${ARCH}" = "arm" ] && return 0
-  make install ${PKG_MAKEINSTALL_OPTS_TARGET}
+  make install DESTDIR=${INSTALL} ${PKG_MAKEINSTALL_OPTS_TARGET}
 }
 
 post_makeinstall_target() {
