@@ -51,6 +51,7 @@ pre_configure_target() {
 }
 
 make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   unset ARCH
   unset DISTRO
   unset PROJECT
@@ -62,6 +63,7 @@ make_target() {
 }
 
 makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   mkdir -p ${INSTALL}/usr/lib/libretro
   cp *.so ${INSTALL}/usr/lib/libretro/mame_libretro.so
   mkdir -p ${INSTALL}/usr/config/retroarch/savefiles/mame/hi
