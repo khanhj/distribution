@@ -18,6 +18,19 @@ post_unpack() {
   sed -i 's/enum class UhjQualityType : uint8_t/enum UhjQualityType/g' core/uhjfilter.h
  # Disable JACK backend (avoids needing jack/jack.h in sysroot)
   sed -i '/build.define("ALSOFT_EXAMPLES", "OFF");/a\  build.define("ALSOFT_BACKEND_JACK", "OFF");' ${PKG_BUILD}/src/audio/openal_soft_wrapper/build.rs
+
+  # Unpack pre-vendored Rust crates (build server has no internet for cargo fetch)
+  if [ -f "${SOURCES}/touchhle-sa/touchhle-rust-vendor.tar.gz" ]; then
+    tar xf "${SOURCES}/touchhle-sa/touchhle-rust-vendor.tar.gz" -C "${PKG_BUILD}/"
+    cat >> "${PKG_BUILD}/.cargo/config.toml" << 'ENDCARGO'
+
+[source.crates-io]
+replace-with = "vendored-sources"
+
+[source.vendored-sources]
+directory = "rust-vendor"
+ENDCARGO
+  fi
 }
 
 make_target() {
@@ -30,7 +43,8 @@ make_target() {
 
   cargo build \
     --target ${TARGET_NAME} \
-    --release
+    --release \
+    --offline
 }
 
 makeinstall_target() {
