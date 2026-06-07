@@ -23,7 +23,17 @@ make_host() {
 
   export RUSTC_BOOTSTRAP="1"
 
-  ./cargo-snapshot/bin/cargo build -v --target ${RUST_HOST} --release --manifest-path="$(get_build_dir rust)/src/tools/cargo/Cargo.toml"
+  local RUST_SRC="$(get_build_dir rust)"
+  mkdir -p ${PKG_BUILD}/.cargo
+  cat > ${PKG_BUILD}/.cargo/config.toml << EOF
+[source.crates-io]
+replace-with = "vendored-sources"
+
+[source.vendored-sources]
+directory = "${RUST_SRC}/vendor"
+EOF
+
+  ./cargo-snapshot/bin/cargo build -v --target ${RUST_HOST} --release --manifest-path="${RUST_SRC}/src/tools/cargo/Cargo.toml"
 }
 
 makeinstall_host() {
