@@ -26,6 +26,7 @@ case ${DEVICE} in
 esac
 
 make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
 #  export TARGET_CLFAGS="${TARGET_CFLAGS} -Wno-implicit-function-declaration -Wno-error=incompatible-pointer-types"
 #  export TARGET_CXXLFAGS="${TARGET_CXXFLAGS} -Wno-implicit-function-declaration -Wno-error=incompatible-pointer-types"
   case ${ARCH} in
@@ -55,6 +56,7 @@ make_target() {
 }
 
 makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   mkdir -p ${INSTALL}/usr/local/lib
   cp ${PKG_BUILD}/projects/unix/libsimple64.so.2.0.0 ${INSTALL}/usr/local/lib/libsimple64.so.2
   chmod 644 ${INSTALL}/usr/local/lib/libsimple64.so.2

@@ -31,6 +31,7 @@ case ${DEVICE} in
 esac
 
 make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
 
   export HOST_CPU=${TARGET_ARCH} \
          NEW_DYNAREC=1 \
@@ -61,6 +62,7 @@ make_target() {
 }
 
 makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   UPREFIX=${INSTALL}/usr/local
   ULIBDIR=${UPREFIX}/lib
   USHAREDIR=${UPREFIX}/share/mupen64plus

@@ -31,6 +31,7 @@ case ${DEVICE} in
 esac
 
 make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   export CFLAGS="${CFLAGS} -Wno-error=incompatible-pointer-types"
 
   export V=1 \
@@ -59,6 +60,7 @@ make_target() {
 }
 
 makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   UPREFIX=${INSTALL}/usr/local
   ULIBDIR=${UPREFIX}/lib
   UBINDIR=${UPREFIX}/bin
