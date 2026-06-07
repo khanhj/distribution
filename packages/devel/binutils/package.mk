@@ -22,6 +22,7 @@ PKG_CONFIGURE_OPTS_HOST="--target=${TARGET_NAME} \
                          --disable-multilib \
                          --disable-libada \
                          --disable-libssp \
+                         --disable-gprofng \
                          --enable-version-specific-runtime-libs \
                          --enable-plugins \
                          --enable-gold \
