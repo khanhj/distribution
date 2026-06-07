@@ -4,29 +4,22 @@
 
 PKG_NAME="syncthing"
 PKG_VERSION="2.0.13"
+PKG_SHA256="f62c7e85c081ea43c6e0c8a8bf428fb2f9c1be7f7d504fb214ddd4e1f056c36b"
 PKG_LICENSE="MPLv2"
 PKG_SITE="https://syncthing.net/"
-PKG_URL="https://github.com/syncthing/syncthing/releases/download/v${PKG_VERSION}/syncthing-source-v${PKG_VERSION}.tar.gz"
-PKG_DEPENDS_TARGET="toolchain go:host"
+PKG_URL="https://github.com/syncthing/syncthing/releases/download/v${PKG_VERSION}/syncthing-linux-arm64-v${PKG_VERSION}.tar.gz"
+PKG_DEPENDS_TARGET="toolchain"
 PKG_LONGDESC="Syncthing: open source continuous file synchronization"
 PKG_TOOLCHAIN="manual"
-
-configure_target() {
-  go_configure
-  export CGO_ENABLED=1
-  export LDFLAGS="-w -linkmode external -extldflags -Wl,--unresolved-symbols=ignore-in-shared-libs -extld ${CC} \
-                  -X github.com/syncthing/syncthing/lib/build.Version=v${PKG_VERSION}"
-}
+PKG_ARCH="aarch64"
 
 make_target() {
-  HOME=${ROOT} GOCACHE=${ROOT}/.cache/go-build \
-       GOTOOLCHAIN=local \
-       ${GOLANG} build -a -tags noupgrade -ldflags "${LDFLAGS}" -o bin/syncthing -v ./cmd/syncthing
+  :
 }
 
 makeinstall_target() {
   mkdir -p ${INSTALL}/usr/bin
-  cp bin/syncthing ${INSTALL}/usr/bin
+  cp ${PKG_BUILD}/syncthing ${INSTALL}/usr/bin
   cp -rf ${PKG_DIR}/sources/start_syncthing.sh ${INSTALL}/usr/bin
   chmod 0755 ${INSTALL}/usr/bin/*
 }
