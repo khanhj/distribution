@@ -30,10 +30,12 @@ PKG_LONGDESC="Port of uae4arm for libretro (rpi/android)"
 PKG_TOOLCHAIN="make"
 
 make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   make -f Makefile.libretro platform=unix_aarch64 "CPU_FLAGS=-mcpu=${TARGET_CPU}"
 }
 
 makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   mkdir -p ${INSTALL}/usr/lib/libretro
   cp uae4arm_libretro.so ${INSTALL}/usr/lib/libretro/
 }
