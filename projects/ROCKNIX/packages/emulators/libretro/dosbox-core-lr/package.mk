@@ -32,6 +32,7 @@ PKG_BUILD_FLAGS="-lto"
 PKG_TOOLCHAIN="make"
 
 make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   #export PKG_CONFIG_DEBUG_SPEW=1
   make -C libretro target=arm64 platform=unix WITH_FAKE_SDL=1 STATIC_LIBCXX=0 \
 	WITH_DYNAREC=arm64 WITH_FLUIDSYNTH=0 BUNDLED_AUDIO_CODECS=0 BUNDLED_GLIB=0 \
@@ -39,6 +40,7 @@ make_target() {
 }
 
 makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   mkdir -p ${INSTALL}/usr/lib/libretro
   cp ${PKG_BUILD}/libretro/dosbox_core_libretro.so ${INSTALL}/usr/lib/libretro
 }
