@@ -22,10 +22,10 @@ pre_configure_target() {
 
 make_target() {
   [ "${ARCH}" = "arm" ] && return 0
-  make ${PKG_MAKE_OPTS_TARGET}
+  ninja ${NINJA_OPTS}
 }
 
 makeinstall_target() {
   [ "${ARCH}" = "arm" ] && return 0
-  make install ${PKG_MAKEINSTALL_OPTS_TARGET}
+  DESTDIR=${INSTALL} ninja install
 }
