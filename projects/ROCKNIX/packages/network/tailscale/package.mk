@@ -23,11 +23,13 @@ esac
 PKG_URL="https://pkgs.tailscale.com/stable/tailscale_${PKG_VERSION}${TS_ARCH}.tgz"
 
 pre_unpack() {
+  [ "${ARCH}" = "arm" ] && return 0
   mkdir -p ${PKG_BUILD}
   tar --strip-components=1 -xf $SOURCES/${PKG_NAME}/${PKG_NAME}-${PKG_VERSION}.tgz -C ${PKG_BUILD} tailscale_${PKG_VERSION}${TS_ARCH}
 }
 
 makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   mkdir -p ${INSTALL}/usr/sbin/
     cp ${PKG_BUILD}/tailscale ${INSTALL}/usr/sbin/
     cp ${PKG_BUILD}/tailscaled ${INSTALL}/usr/sbin/
