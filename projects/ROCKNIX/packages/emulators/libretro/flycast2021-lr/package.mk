@@ -59,7 +59,13 @@ pre_make_target() {
   esac
 }
 
+make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  make ${PKG_MAKE_OPTS_TARGET}
+}
+
 makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   mkdir -p ${INSTALL}/usr/lib/libretro
   cp flycast_libretro.so ${INSTALL}/usr/lib/libretro/flycast2021_libretro.so
 }
