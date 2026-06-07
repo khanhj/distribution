@@ -32,6 +32,7 @@ case ${DEVICE} in
 esac
 
 make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   export HOST_CPU=${TARGET_ARCH} \
          NEW_DYNAREC=1 \
          VFP_HARD=1 \
@@ -52,6 +53,7 @@ make_target() {
 }
 
 makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   mkdir -p ${INSTALL}/usr/local/lib
   cp ${PKG_BUILD}/projects/unix/libmupen64plus.so.2.0.0 ${INSTALL}/usr/local/lib
   chmod 644 ${INSTALL}/usr/local/lib/libmupen64plus.so.2.0.0
