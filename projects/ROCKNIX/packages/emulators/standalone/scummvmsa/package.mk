@@ -32,7 +32,18 @@ TARGET_CONFIGURE_OPTS="--host=${TARGET_NAME} \
   esac
 }
 
+make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  make ${PKG_MAKE_OPTS_TARGET}
+}
+
+makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  make install ${PKG_MAKEINSTALL_OPTS_TARGET}
+}
+
 post_makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   mkdir -p ${INSTALL}/usr/config/scummvm/
   cp -rf ${PKG_DIR}/config/* ${INSTALL}/usr/config/scummvm/
 
