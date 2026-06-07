@@ -70,7 +70,19 @@ pre_configure_target() {
   rm -rf ${PKG_BUILD}/subprojects/spdlog_patch_1.14.1-1.zip
 }
 
+make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  ninja ${NINJA_OPTS} ${PKG_MAKE_OPTS_TARGET}
+}
+
+makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  flag_enabled "sysroot" "yes" && DESTDIR=${SYSROOT_PREFIX} ninja install ${PKG_MAKEINSTALL_OPTS_TARGET}
+  DESTDIR=${INSTALL} ninja install ${PKG_MAKEINSTALL_OPTS_TARGET}
+}
+
 post_makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   mkdir -p ${INSTALL}/usr/bin
   cp -rf ${PKG_DIR}/sources/* ${INSTALL}/usr/bin
   chmod +x ${INSTALL}/usr/bin/*
