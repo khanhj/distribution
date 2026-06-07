@@ -10,6 +10,7 @@ PKG_URL="https://ftp.gnu.org/gnu/coreutils/coreutils-${PKG_VERSION}.tar.xz"
 PKG_DEPENDS_TARGET="toolchain"
 PKG_LONGDESC="The GNU Core Utilities are the basic file, shell and text manipulation utilities of the GNU operating system."
 PKG_TOOLCHAIN="auto"
+PKG_CONFIGURE_OPTS_TARGET="--without-gmp"
 
 makeinstall_target() {
   mkdir -p ${INSTALL}/usr/bin
