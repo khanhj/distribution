@@ -10,13 +10,28 @@ PKG_DEPENDS_TARGET="toolchain cargo:host cargo rust glfw"
 PKG_LONGDESC="Librashader is a preprocessor, compiler, and runtime for RetroArch 'slang' shaders, rewritten in pure Rust."
 PKG_TOOLCHAIN="manual"
 
+post_unpack() {
+  if [ -f "${SOURCES}/librashader/librashader-rust-vendor.tar.gz" ]; then
+    tar xf "${SOURCES}/librashader/librashader-rust-vendor.tar.gz" -C "${PKG_BUILD}/"
+    mkdir -p "${PKG_BUILD}/.cargo"
+    cat >> "${PKG_BUILD}/.cargo/config.toml" << 'ENDCARGO'
+[source.crates-io]
+replace-with = "vendored-sources"
+
+[source.vendored-sources]
+directory = "rust-vendor"
+ENDCARGO
+  fi
+}
+
 make_target() {
   unset CMAKE
 
   cargo build \
     --target ${TARGET_NAME} \
     --features stable \
-    --release
+    --release \
+    --offline
 }
 
 makeinstall_target() {
