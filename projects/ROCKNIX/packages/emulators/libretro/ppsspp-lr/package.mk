@@ -119,7 +119,3 @@ pre_make_target() {
   find ${PKG_BUILD} -name build.ninja -exec sed -i "s:isystem :I:g" \{} \;
 }
 
-makeinstall_target() {
-  mkdir -p ${INSTALL}/usr/lib/libretro
-  cp ${PKG_LIBPATH} ${INSTALL}/usr/lib/libretro/
-}
