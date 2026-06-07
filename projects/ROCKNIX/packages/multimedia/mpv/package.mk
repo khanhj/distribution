@@ -28,7 +28,25 @@ fi
 
 PKG_MESON_OPTS_TARGET+=" -Dsdl2=enabled"
 
+configure_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  create_meson_conf_target ${TARGET} ${MESON_CONF}
+  CC="${HOST_CC}" CXX="${HOST_CXX}" meson setup ${TARGET_MESON_OPTS} --cross-file=${MESON_CONF} ${PKG_MESON_OPTS_TARGET} ${PKG_MESON_SCRIPT%/*}
+}
+
+make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  ninja ${NINJA_OPTS} ${PKG_MAKE_OPTS_TARGET}
+}
+
+makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  flag_enabled "sysroot" "yes" && DESTDIR=${SYSROOT_PREFIX} ninja install ${PKG_MAKEINSTALL_OPTS_TARGET}
+  DESTDIR=${INSTALL} ninja install ${PKG_MAKEINSTALL_OPTS_TARGET}
+}
+
 post_makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   cp ${PKG_DIR}/scripts/* ${INSTALL}/usr/bin
   chmod 0755 ${INSTALL}/usr/bin/* 2>/dev/null ||:
   mkdir -p ${INSTALL}/usr/config/mpv
