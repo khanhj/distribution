@@ -50,7 +50,13 @@ pre_configure_target() {
   sed -i 's/\-O[23]/-Ofast/' ${PKG_BUILD}/Makefile
 }
 
+make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  make ${PKG_MAKE_OPTS_TARGET}
+}
+
 makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   mkdir -p ${INSTALL}/usr/lib/libretro
   cp mupen64plus_libretro.so ${INSTALL}/usr/lib/libretro/
 }
