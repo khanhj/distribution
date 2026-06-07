@@ -77,13 +77,25 @@ pre_configure_target() {
   export CFLAGS="${CFLAGS} -Wno-error -DEGL_NO_X11=1 -DMESA_EGL_NO_X11_HEADERS=1"
 }
 
+configure_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  CMAKE_EXPORT_COMPILE_COMMANDS=1 cmake ${CMAKE_GENERATOR_NINJA} ${TARGET_CMAKE_OPTS} ${PKG_CMAKE_OPTS_TARGET} ${PKG_CMAKE_SCRIPT%/*}
+}
+
+make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  ninja ${NINJA_OPTS} ${PKG_MAKE_OPTS_TARGET}
+}
+
 pre_make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   # fix cross compiling
   find ${PKG_BUILD} -name flags.make -exec sed -i "s:isystem :I:g" \{} \;
   find ${PKG_BUILD} -name build.ninja -exec sed -i "s:isystem :I:g" \{} \;
 }
 
 makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   mkdir -p ${INSTALL}/usr/bin
   cp ${PKG_DIR}/scripts/* ${INSTALL}/usr/bin
   cp PPSSPPSDL ${INSTALL}/usr/bin/ppsspp
@@ -102,5 +114,6 @@ makeinstall_target() {
 }
 
 post_install() {
+  [ "${ARCH}" = "arm" ] && return 0
   sed -e "s/@GRENDERER@/${GRENDERER}/g" -i ${INSTALL}/usr/bin/start_ppsspp.sh
 }
