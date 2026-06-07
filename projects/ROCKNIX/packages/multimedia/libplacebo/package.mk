@@ -27,5 +27,6 @@ make_target() {
 
 makeinstall_target() {
   [ "${ARCH}" = "arm" ] && return 0
+  flag_enabled "sysroot" "yes" && DESTDIR=${SYSROOT_PREFIX} ninja install
   DESTDIR=${INSTALL} ninja install
 }
