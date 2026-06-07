@@ -22,10 +22,10 @@ makeinstall_target() {
     cp -a ${PKG_DIR}/scripts/* ${INSTALL}/usr/bin
 
   mkdir -p ${INSTALL}/usr/config/PortMaster/release
-    curl -Lo ${INSTALL}/usr/config/PortMaster/release/PortMaster.zip ${PKG_URL}
+    cp ${SOURCES}/${PKG_NAME}/${PKG_NAME}-${PKG_VERSION}.zip ${INSTALL}/usr/config/PortMaster/release/PortMaster.zip
 
   mkdir -p ${INSTALL}/usr/lib/compat
-    curl -Lo ${PKG_BUILD}/compat.tar.gz ${COMPAT_URL}
+    cp ${SOURCES}/${PKG_NAME}/compat.tar.gz ${PKG_BUILD}/compat.tar.gz
     tar -xvf ${PKG_BUILD}/compat.tar.gz -C ${INSTALL}/usr/lib
     rm -rf ${INSTALL}/usr/lib/compat/libSDL2-2.0.so.0*
 }

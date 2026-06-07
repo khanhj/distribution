@@ -33,5 +33,5 @@ makeinstall_target() {
   cp -rf ${PKG_DIR}/config/${DEVICE}/keymap.toml ${INSTALL}/usr/config/nanoboyadvance/
 
   mkdir -p ${INSTALL}/usr/config/nanoboyadvance/bios
-  curl -Lo ${INSTALL}/usr/config/nanoboyadvance/bios/gba_bios.bin ${PKG_OPEN_SOURCE_BIOS}
+  cp ${SOURCES}/${PKG_NAME}/gba_bios.bin ${INSTALL}/usr/config/nanoboyadvance/bios/gba_bios.bin
 }

@@ -67,8 +67,6 @@ make_target() {
   done
   export USER="${USER:-$(whoami)}"
   export HOME=${PKG_BUILD}/nix
-  curl -L https://nixos.org/nix/install | sh -s -- --no-daemon
-  . "${HOME}/.nix-profile/etc/profile.d/nix.sh"
 
   mkdir -p "${PKG_BUILD}/.${TARGET_NAME}"
   cd "${PKG_BUILD}/.${TARGET_NAME}"
@@ -96,14 +94,13 @@ make_target() {
     -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY
     -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=ONLY
     -DBUILD_FEXCONFIG=True
+    -DBUILD_THUNKS=False
     "${FEX_CMAKE_OPTS[@]}"
-    -DGENERATOR_EXE="${TOOLCHAIN}/usr/bin/thunkgen"
     -DCMAKE_INSTALL_LIBDIR=lib
     -DQT_HOST_PATH="${TOOLCHAIN}/usr/local/qt6"
     -DTUNE_CPU="${TUNE_CPU}"
   )
   cmake "${tgt_opts[@]}"
-  bash "${PKG_BUILD}/Data/nix/cmake_enable_libfwd.sh"
   ninja
 }
 

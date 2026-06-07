@@ -42,16 +42,16 @@ pre_configure_target() {
   # Download Sub Modules
   ### xxHash
   mkdir -p ${PKG_BUILD}/subprojects/
-  curl -Lo ${PKG_BUILD}/subprojects/xxhash.tar.gz http://github.com/mesonbuild/wrapdb/releases/download/xxhash_0.8.3-1/xxHash-0.8.3.tar.gz
+  cp ${SOURCES}/${PKG_NAME}/xxhash.tar.gz ${PKG_BUILD}/subprojects/xxhash.tar.gz
   tar -xvf ${PKG_BUILD}/subprojects/xxhash.tar.gz -C ${PKG_BUILD}/subprojects/
-  curl -Lo ${PKG_BUILD}/subprojects/xxhash_0.8.3-1_patch.zip https://wrapdb.mesonbuild.com/v2/xxhash_0.8.3-1/get_patch
+  cp ${SOURCES}/${PKG_NAME}/xxhash_patch.zip ${PKG_BUILD}/subprojects/xxhash_0.8.3-1_patch.zip
   unzip -o ${PKG_BUILD}/subprojects/xxhash_0.8.3-1_patch.zip -d ${PKG_BUILD}/subprojects
   rm -rf ${PKG_BUILD}/subprojects/xxhash.tar.gz
   rm -rf ${PKG_BUILD}/subprojects/xxhash_0.8.3-1_patch.zip
 
   ### glslang
   mkdir -p ${PKG_BUILD}/subprojects/
-  curl -Lo ${PKG_BUILD}/subprojects/glslang.tar.gz https://github.com/KhronosGroup/glslang/archive/8a85691a0740d390761a1008b4696f57facd02c4.tar.gz
+  cp ${SOURCES}/${PKG_NAME}/glslang.tar.gz ${PKG_BUILD}/subprojects/glslang.tar.gz
   tar -xvf ${PKG_BUILD}/subprojects//glslang.tar.gz -C ${PKG_BUILD}/subprojects/
   rm -rf ${PKG_BUILD}/subprojects/glslang.tar.gz
 }
@@ -123,7 +123,7 @@ makeinstall_target() {
   cp -rf ${PKG_DIR}/config/${DEVICE}/xemu.toml ${INSTALL}/usr/config/xemu
 
   #Download HDD IMAGE
-  curl -Lo ${INSTALL}/usr/config/xemu/hdd.zip ${PKG_HDD_IMAGE}
+  cp ${SOURCES}/${PKG_NAME}/xbox_hdd.qcow2.zip ${INSTALL}/usr/config/xemu/hdd.zip
 }
 
 post_install() {

@@ -110,7 +110,7 @@ makeinstall_target() {
   fi
   rm ${INSTALL}/usr/config/ppsspp/assets/gamecontrollerdb.txt
   ln -sf NotoSansJP-Regular.ttf ${INSTALL}/usr/config/ppsspp/assets/Roboto-Condensed.ttf
-  curl -Lo ${INSTALL}/usr/config/ppsspp/PSP/Cheats/cheat.db https://raw.githubusercontent.com/Saramagrean/CWCheat-Database-Plus-/${CHEAT_DB_VERSION}/cheat.db
+  cp ${SOURCES}/${PKG_NAME}/cheat.db ${INSTALL}/usr/config/ppsspp/PSP/Cheats/cheat.db
 }
 
 post_install() {

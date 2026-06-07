@@ -25,7 +25,7 @@ makeinstall_target() {
 
   mkdir -p ${INSTALL}/usr/share/idtech
   cp -rf ${PKG_DIR}/sources/* ${INSTALL}/usr/share/idtech/
-  curl -Lo ${INSTALL}/usr/share/idtech/doom.tar.gz ${PKG_DOOM_SHAREWARE}
+  cp ${SOURCES}/${PKG_NAME}/doom.tar.gz ${INSTALL}/usr/share/idtech/doom.tar.gz
 }
 
 post_install() {

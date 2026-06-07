@@ -12,5 +12,5 @@ PKG_ACE_FIRMWARE="https://github.com/JeffyCN/mirrors/raw/e08ced3e0235b25a7ba2a3a
 #Panfork needs v
 makeinstall_target() {
   mkdir -p ${INSTALL}/$(get_full_firmware_dir)
-  curl -Lo ${INSTALL}/$(get_full_firmware_dir)/mali_csffw.bin ${PKG_ACE_FIRMWARE}
+  cp ${SOURCES}/${PKG_NAME}/mali_csffw.bin ${INSTALL}/$(get_full_firmware_dir)/mali_csffw.bin
 }

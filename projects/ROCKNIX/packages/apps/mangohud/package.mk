@@ -34,7 +34,7 @@ pre_configure_target() {
   mkdir -p ${PKG_BUILD}/subprojects/
 
   ### vulkan-headers
-  curl -Lo ${PKG_BUILD}/subprojects/vulkan-headers.tar.gz https://github.com/KhronosGroup/Vulkan-Headers/archive/v1.3.283.tar.gz
+  cp ${SOURCES}/${PKG_NAME}/vulkan-headers.tar.gz ${PKG_BUILD}/subprojects/vulkan-headers.tar.gz
   tar -xvf ${PKG_BUILD}/subprojects/vulkan-headers.tar.gz -C ${PKG_BUILD}/subprojects/
   #curl -Lo ${PKG_BUILD}/subprojects/vulkan-headers_patch_1.3.283-1.zip https://wrapdb.mesonbuild.com/v2/vulkan-headers_1.3.283-1/get_patch
   #unzip -o ${PKG_BUILD}/subprojects/vulkan-headers_patch_1.3.283-1.zip -d ${PKG_BUILD}/subprojects
@@ -43,7 +43,7 @@ pre_configure_target() {
   rm -rf ${PKG_BUILD}/subprojects/vulkan-headers_patch_1.3.283-1.zip
 
   ### imgui
-  curl -Lo ${PKG_BUILD}/subprojects/imgui.tar.gz https://github.com/ocornut/imgui/archive/refs/tags/v1.91.6.tar.gz
+  cp ${SOURCES}/${PKG_NAME}/imgui.tar.gz ${PKG_BUILD}/subprojects/imgui.tar.gz
   tar -xvf ${PKG_BUILD}/subprojects/imgui.tar.gz -C ${PKG_BUILD}/subprojects/
   #curl -Lo ${PKG_BUILD}/subprojects/imgui_patch_1.91.6-3.zip https://wrapdb.mesonbuild.com/v2/imgui_1.91.6-3/get_patch
   #unzip -o ${PKG_BUILD}/subprojects/imgui_patch_1.91.6-3.zip -d ${PKG_BUILD}/subprojects
@@ -52,7 +52,7 @@ pre_configure_target() {
   rm -rf ${PKG_BUILD}/subprojects/imgui_patch_1.91.6-3.zip
 
   ### implot
-  curl -Lo ${PKG_BUILD}/subprojects/implot.zip https://github.com/epezent/implot/archive/refs/tags/v0.16.zip
+  cp ${SOURCES}/${PKG_NAME}/implot.zip ${PKG_BUILD}/subprojects/implot.zip
   unzip -o ${PKG_BUILD}/subprojects/implot.zip -d ${PKG_BUILD}/subprojects
   #curl -Lo ${PKG_BUILD}/subprojects/implot_patch_0.16-1.zip https://wrapdb.mesonbuild.com/v2/implot_0.16-1/get_patch
   #unzip -o ${PKG_BUILD}/subprojects/implot_patch_0.16-1.zip -d ${PKG_BUILD}/subprojects
@@ -61,7 +61,7 @@ pre_configure_target() {
   rm -rf ${PKG_BUILD}/subprojects/implot_patch_0.16-1.zip
 
   ### spdlog
-  curl -Lo ${PKG_BUILD}/subprojects/spdlog.tar.gz https://github.com/gabime/spdlog/archive/refs/tags/v1.14.1.tar.gz
+  cp ${SOURCES}/${PKG_NAME}/spdlog.tar.gz ${PKG_BUILD}/subprojects/spdlog.tar.gz
   tar -xvf ${PKG_BUILD}/subprojects/spdlog.tar.gz -C ${PKG_BUILD}/subprojects/
   #curl -Lo ${PKG_BUILD}/subprojects/spdlog_patch_1.14.1-1.zip https://wrapdb.mesonbuild.com/v2/spdlog_1.14.1-1/get_patch
   #unzip -o ${PKG_BUILD}/subprojects/spdlog_patch_1.14.1-1.zip -d ${PKG_BUILD}/subprojects
