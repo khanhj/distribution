@@ -19,3 +19,13 @@ fi
 pre_configure_target() {
   export TARGET_LDFLAGS="${LDFLAGS} -lglslang"
 }
+
+make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  make ${PKG_MAKE_OPTS_TARGET}
+}
+
+makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  make install ${PKG_MAKEINSTALL_OPTS_TARGET}
+}
