@@ -9,6 +9,7 @@ PKG_URL="${PKG_SITE}.git"
 PKG_DEPENDS_TARGET="toolchain cargo:host cargo rust SDL2 sndio libsamplerate"
 PKG_LONGDESC="touchHLE: high-level emulator for iPhone OS apps"
 PKG_TOOLCHAIN="manual"
+PKG_ARCH="aarch64"
 
 post_unpack() {
   cd ${PKG_BUILD}/vendor/openal-soft
