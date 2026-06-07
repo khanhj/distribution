@@ -52,7 +52,13 @@ PKG_CONFIGURE_OPTS_TARGET="${DISABLED_MODULES}"
   )
 }
 
+make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  make ${PKG_MAKE_OPTS_TARGET}
+}
+
 makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   mkdir -p ${INSTALL}/usr/bin
   cp -rf ${PKG_BUILD}/.${TARGET_NAME}/src/mednafen ${INSTALL}/usr/bin
   cp -rf ${PKG_DIR}/scripts/* ${INSTALL}/usr/bin
