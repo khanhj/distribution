@@ -29,7 +29,13 @@ pre_configure_target() {
   fi
 }
 
+make_target() {
+  [ "${ARCH}" = "arm" ] && return 0
+  make ${PKG_MAKE_OPTS_TARGET}
+}
+
 makeinstall_target() {
+  [ "${ARCH}" = "arm" ] && return 0
   mkdir -p ${INSTALL}/usr/lib/libretro
   cp parallel_n64_libretro.so ${INSTALL}/usr/lib/libretro/
 
