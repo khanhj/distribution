@@ -12,6 +12,7 @@ PKG_DEPENDS_TARGET="toolchain"
 PKG_LONGDESC="Syncthing: open source continuous file synchronization"
 PKG_TOOLCHAIN="manual"
 PKG_ARCH="aarch64"
+PKG_SKIP_PATCHES="yes"
 
 make_target() {
   :
