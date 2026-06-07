@@ -20,6 +20,7 @@ configure_target() {
 
 make_target() {
   HOME=${ROOT} GOCACHE=${ROOT}/.cache/go-build \
+       GOTOOLCHAIN=local \
        ${GOLANG} build -a -tags noupgrade -ldflags "${LDFLAGS}" -o bin/syncthing -v ./cmd/syncthing
 }
 
