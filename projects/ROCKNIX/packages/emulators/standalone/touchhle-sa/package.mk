@@ -28,6 +28,8 @@ post_unpack() {
 replace-with = "vendored-sources"
 
 [source."git+https://github.com/touchHLE/rust-sdl2?tag=touchHLE-3#b67f98fe6a147773b6f05d50ae775d9fe16561e7"]
+git = "https://github.com/touchHLE/rust-sdl2"
+tag = "touchHLE-3"
 replace-with = "vendored-sources"
 
 [source.vendored-sources]
