@@ -48,8 +48,7 @@ make_target() {
 
   cargo build \
     --target ${TARGET_NAME} \
-    --release \
-    --offline
+    --release
 }
 
 makeinstall_target() {
