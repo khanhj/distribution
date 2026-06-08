@@ -46,6 +46,24 @@ make_target() {
 
   export CMAKE_ARGS="${CMAKE_ARGS} -DALSOFT_BACKEND_JACK=OFF"
 
+  # FIXCONFIG modifies config.sub in vendored packages; update checksums to match
+  for csub in rust-vendor/sdl2-sys/SDL/build-scripts/config.sub \
+               rust-vendor/sdl2-sys/SDL/build-scripts/config.guess; do
+    [ -f "$csub" ] || continue
+    pkg_dir=$(dirname $(dirname $(dirname $csub)))
+    checksum_file="${pkg_dir}/.cargo-checksum.json"
+    [ -f "$checksum_file" ] || continue
+    rel="${csub#${pkg_dir}/}"
+    new_hash=$(sha256sum "$csub" | cut -d' ' -f1)
+    python3 -c "
+import json
+cf = '${checksum_file}'
+d = json.load(open(cf))
+d['files']['${rel}'] = '${new_hash}'
+json.dump(d, open(cf, 'w'))
+"
+  done
+
   cargo build \
     --target ${TARGET_NAME} \
     --release
