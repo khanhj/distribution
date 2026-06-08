@@ -27,6 +27,9 @@ post_unpack() {
 [source.crates-io]
 replace-with = "vendored-sources"
 
+[source."git+https://github.com/touchHLE/rust-sdl2?tag=touchHLE-3"]
+replace-with = "vendored-sources"
+
 [source.vendored-sources]
 directory = "rust-vendor"
 ENDCARGO
