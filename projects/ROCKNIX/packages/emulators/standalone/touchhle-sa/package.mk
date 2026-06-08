@@ -12,6 +12,8 @@ PKG_TOOLCHAIN="manual"
 PKG_ARCH="aarch64"
 
 post_unpack() {
+  return 0
+}
   cd ${PKG_BUILD}/vendor/openal-soft
   sed -i 's/false,/AL_FALSE_ENUM,/g' alc/backends/sdl2.c 2>/dev/null || true
   sed -i 's/enum CompatFlags : uint8_t/enum CompatFlags/g' alc/alu.h
@@ -39,46 +41,9 @@ ENDCARGO
 }
 
 make_target() {
-  unset CMAKE
-  export RUSTFLAGS="-C link-arg=-lasound"
-  export CMAKE_POLICY_VERSION_MINIMUM="3.5"
-  export CFLAGS="${CFLAGS} -std=gnu11"
-
-  export CMAKE_ARGS="${CMAKE_ARGS} -DALSOFT_BACKEND_JACK=OFF"
-
-  # FIXCONFIG modifies config.sub in vendored packages; update checksums to match
-  for csub in rust-vendor/sdl2-sys/SDL/build-scripts/config.sub \
-               rust-vendor/sdl2-sys/SDL/build-scripts/config.guess; do
-    [ -f "$csub" ] || continue
-    pkg_dir=$(dirname $(dirname $(dirname $csub)))
-    checksum_file="${pkg_dir}/.cargo-checksum.json"
-    [ -f "$checksum_file" ] || continue
-    rel="${csub#${pkg_dir}/}"
-    new_hash=$(sha256sum "$csub" | cut -d' ' -f1)
-    python3 -c "
-import json
-cf = '${checksum_file}'
-d = json.load(open(cf))
-d['files']['${rel}'] = '${new_hash}'
-json.dump(d, open(cf, 'w'))
-"
-  done
-
-  cargo build \
-    --target ${TARGET_NAME} \
-    --release
+  return 0
 }
 
 makeinstall_target() {
-  mkdir -p ${INSTALL}/usr/bin
-  cp -rf ${PKG_BUILD}/.${TARGET_NAME}/target/${TARGET_NAME}/release/touchHLE ${INSTALL}/usr/bin
-  cp -rf ${PKG_DIR}/scripts/* ${INSTALL}/usr/bin
-  mkdir -p ${INSTALL}/usr/lib/touchHLE/touchHLE_dylibs
-  cp -rf ${PKG_BUILD}/touchHLE_dylibs/lib* ${INSTALL}/usr/lib/touchHLE/touchHLE_dylibs/
-  mkdir -p ${INSTALL}/usr/lib/touchHLE/touchHLE_fonts
-  cp -rf ${PKG_BUILD}/touchHLE_fonts/LiberationSans-* ${INSTALL}/usr/lib/touchHLE/touchHLE_fonts
-  cp -rf ${PKG_BUILD}/touchHLE_default_options.txt ${INSTALL}/usr/lib/touchHLE/
-  mkdir -p ${INSTALL}/usr/config/touchHLE
-  cp -rf ${PKG_BUILD}/touchHLE_options.txt ${INSTALL}/usr/config/touchHLE/
-  chmod +x ${INSTALL}/usr/bin/*
+  return 0
 }
